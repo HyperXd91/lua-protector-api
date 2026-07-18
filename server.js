@@ -4,7 +4,7 @@ app.get('/fetch-runtime', (req, res) => {
     const secretKey = req.headers['x-access-key'];
     
     // Change "MySecretPassword123" to any password you want!
-    if (!secretKey || secretKey !== "MySecretPassword123") {
+    if (!secretKey || secretKey !== "fukligma82725252***bbbsall177##") {
         return res.status(403).send("Error: Access Denied. You cannot view this source code.");
     }
 
