@@ -1,0 +1,14 @@
+{
+  "name": "lua-realtime-protector",
+  "version": "1.0.0",
+  "description": "Secure Server Side Obfuscation API Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "lua-format": "^1.1.2"
+  }
+}
