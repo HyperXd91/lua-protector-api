@@ -1,3 +1,26 @@
+// API Handshake Entry Point with Security Key Check
+app.get('/fetch-runtime', (req, res) => {
+    // Check if the request contains your secret header key
+    const secretKey = req.headers['x-access-key'];
+    
+    // Change "MySecretPassword123" to any password you want!
+    if (!secretKey || secretKey !== "MySecretPassword123") {
+        return res.status(403).send("Error: Access Denied. You cannot view this source code.");
+    }
+
+    try {
+        const scrambledOutput = luamin.Beautify(mySecretSourceCode, {
+            RenameVariables: true,
+            RenameGlobals: false,
+            SolveMath: true
+        });
+        res.set('Content-Type', 'text/plain');
+        res.send(scrambledOutput);
+    } catch (e) {
+        res.status(500).send("-- Server execution optimization failure.");
+    }
+});
+
 const express = require('express');
 const cors = require('cors');
 const luamin = require('lua-format'); // Handles structural protection
