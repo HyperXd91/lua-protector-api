@@ -1,29 +1,6 @@
-// API Handshake Entry Point with Security Key Check
-app.get('/fetch-runtime', (req, res) => {
-    // Check if the request contains your secret header key
-    const secretKey = req.headers['x-access-key'];
-    
-    // Change "MySecretPassword123" to any password you want!
-    if (!secretKey || secretKey !== "fukligma82725252***bbbsall177##") {
-        return res.status(403).send("Error: Access Denied. You cannot view this source code.");
-    }
-
-    try {
-        const scrambledOutput = luamin.Beautify(mySecretSourceCode, {
-            RenameVariables: true,
-            RenameGlobals: false,
-            SolveMath: true
-        });
-        res.set('Content-Type', 'text/plain');
-        res.send(scrambledOutput);
-    } catch (e) {
-        res.status(500).send("-- Server execution optimization failure.");
-    }
-});
-
 const express = require('express');
 const cors = require('cors');
-const luamin = require('lua-format'); // Handles structural protection
+const luamin = require('lua-format'); 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -31,7 +8,18 @@ app.use(cors());
 app.use(express.json());
 
 // ==========================================================
-// Your Source Code: Hidden safely on your cloud ecosystem.
+// SECURITY ACCESS CONFIGURATION
+// ==========================================================
+const SECRET_ACCESS_KEY = "fukligma82725252***bbbsall177##";
+
+// Put the approved User IDs inside this array (as strings)
+const whitelist = [
+    "12345678", 
+    "87654321"
+];
+
+// ==========================================================
+// Your Master Source Code: Hidden safely on your cloud server.
 // ==========================================================
 const mySecretSourceCode = `
 -- ==========================================
@@ -585,19 +573,31 @@ LuaTimer:scheduleTimer(function()
 end, 3000, 1)
 `;
 
-// API Handshake Entry Point
+// API Routing Validation Check
 app.get('/fetch-runtime', (req, res) => {
+    const inboundKey = req.headers['x-access-key'];
+    const playerID = req.headers['x-player-id'];
+
+    if (!inboundKey || inboundKey !== SECRET_ACCESS_KEY) {
+        return res.status(403).send("Error: Access Denied. Authorization Signature Missing.");
+    }
+
+    if (!playerID || !whitelist.includes(playerID)) {
+        return res.status(403).send("Error: Access Denied. Your Account ID is not whitelisted.");
+    }
+
     try {
-        const scrambledOutput = luamin.Beautify(mySecretSourceCode, {
+        const fullyProtectedText = luamin.Minify(mySecretSourceCode, {
             RenameVariables: true,
             RenameGlobals: false,
             SolveMath: true
         });
+        
         res.set('Content-Type', 'text/plain');
-        res.send(scrambledOutput);
-    } catch (e) {
-        res.status(500).send("-- Server execution optimization failure.");
+        res.send(fullyProtectedText);
+    } catch (err) {
+        res.status(500).send("Error: Internal Compiler Pipeline Fault.");
     }
 });
 
-app.listen(PORT, () => console.log(`Server online on port ${PORT}`));
+app.listen(PORT, () => console.log(`Active Security Gateway running on port ${PORT}`));
